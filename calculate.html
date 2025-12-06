@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angels Pitzza Order Form</title>
+
+    <script>
+        function calculateTotal() {
+            let total = 0;
+
+            // Prices
+            const pricePepperoni = 150;
+            const priceCheezy = 170;
+            const priceHawaiian = 160;
+
+            // Quantities
+            let pepQty = document.getElementById("pepperoniQty").value;
+            let cheezyQty = document.getElementById("cheezyQty").value;
+            let hawiQty = document.getElementById("hawaiianQty").value;
+
+            // Check if checkbox selected before adding
+            if (document.getElementById("pepperoni").checked) {
+                total += pepQty * pricePepperoni;
+            }
+            if (document.getElementById("cheezy").checked) {
+                total += cheezyQty * priceCheezy;
+            }
+            if (document.getElementById("hawaiian").checked) {
+                total += hawiQty * priceHawaiian;
+            }
+
+            document.getElementById("totalAmount").value = total;
+
+            // Also calculate change automatically
+            calculateChange();
+        }
+
+        function calculateChange() {
+            let total = document.getElementById("totalAmount").value;
+            let money = document.getElementById("moneyGiven").value;
+
+            if (money === "") {
+                document.getElementById("change").value = "";
+                return;
+            }
+
+            let change = money - total;
+            document.getElementById("change").value = change;
+        }
+
+        // RECEIPT FUNCTION
+        function showReceipt(event) {
+            event.preventDefault(); // Stop page from refreshing
+
+            let fname = document.getElementsByName("firstName")[0].value;
+            let lname = document.getElementsByName("lastName")[0].value;
+
+            let total = document.getElementById("totalAmount").value;
+            let money = document.getElementById("moneyGiven").value;
+            let change = document.getElementById("change").value;
+
+            let receipt = "===== ANGEL'S PIZZA RECEIPT =====\n\n";
+            receipt += "Customer: " + fname + " " + lname + "\n\n";
+            receipt += "Order Summary:\n";
+
+            if (document.getElementById("pepperoni").checked) {
+                receipt += "• Pepperoni x " + document.getElementById("pepperoniQty").value + "\n";
+            }
+            if (document.getElementById("cheezy").checked) {
+                receipt += "• Cheezy x " + document.getElementById("cheezyQty").value + "\n";
+            }
+            if (document.getElementById("hawaiian").checked) {
+                receipt += "• Hawaiian x " + document.getElementById("hawaiianQty").value + "\n";
+            }
+
+            receipt += "\n----------------------------------\n";
+            receipt += "TOTAL: ₱" + total + "\n";
+            receipt += "MONEY GIVEN: ₱" + money + "\n";
+            receipt += "CHANGE: ₱" + change + "\n";
+            receipt += "----------------------------------\n\n";
+            receipt += "Thank you for ordering!\n";
+
+            alert(receipt);
+        }
+    </script>
+
+</head>
+<body style="background-image: url('th.jpg');">
+
+    <h1>Angels Pitzza Order Form</h1>
+
+    <form onsubmit="showReceipt(event)">
+        <label>First Name:</label><br>
+        <input type="text" name="firstName"><br>
+
+        <label>Last Name:</label><br>
+        <input type="text" name="lastName"><br>
+
+        <label>Email Address:</label><br>
+        <input type="email" name="email"><br>
+
+        <label>Contact Number:</label><br>
+        <input type="tel" name="contactNumber"><br>
+
+        <label>Preferred Delivery Date:</label><br>
+        <input type="text" name="deliveryDate" placeholder="mm/dd/yyyy"><br>
+
+        <p>Sizes:</p>
+        <input type="radio" name="size" value="small"> Small
+        <input type="radio" name="size" value="medium"> Medium
+        <input type="radio" name="size" value="large"> Large<br>
+
+        <p>Flavored:</p>
+
+        <input type="checkbox" id="pepperoni" onclick="calculateTotal()">
+        <label>Pepperoni (₱150)</label>
+        <input type="number" id="pepperoniQty" min="0" value="0" oninput="calculateTotal()"><br>
+
+        <input type="checkbox" id="cheezy" onclick="calculateTotal()">
+        <label>Cheezy (₱170)</label>
+        <input type="number" id="cheezyQty" min="0" value="0" oninput="calculateTotal()"><br>
+
+        <input type="checkbox" id="hawaiian" onclick="calculateTotal()">
+        <label>Hawaiian (₱160)</label>
+        <input type="number" id="hawaiianQty" min="0" value="0" oninput="calculateTotal()"><br><br>
+
+        <label>Total Amount:</label><br>
+        <input type="text" id="totalAmount" readonly><br><br>
+
+        <label>Money Given by BuyerS:</label><br>
+        <input type="number" id="moneyGiven" oninput="calculateChange()"><br><br>
+
+        <label>Change :</label><br>
+        <input type="text" id="change" readonly><br><br>
+
+        <label>Gcash/Paymaya:</label><br>
+        <input type="text" name="gcash"><br>
+
+        <label>PIN:</label><br>
+        <input type="password" name="pin"><br><br>
+
+        <textarea name="notes" rows="2" placeholder="Any special instructions?"></textarea><br><br>
+
+        <input type="submit" value="Submit Order">
+    </form>
+
+</body>
+</html>
